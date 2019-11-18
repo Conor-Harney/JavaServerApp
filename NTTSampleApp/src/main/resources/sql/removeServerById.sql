@@ -1,0 +1,1 @@
+delete from ntt_db.server s where s.id like ${serverId}

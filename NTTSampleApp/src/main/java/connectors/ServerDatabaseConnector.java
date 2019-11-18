@@ -8,50 +8,92 @@ import java.util.Map;
 import readers.FileReader;
 import templates.Server;
 
-public class ServerDatabaseConnector extends DatabaseConnector {
-
-	FileReader m_FileReader;
+public class ServerDatabaseConnector extends DatabaseConnector 
+{
 	
-	public ServerDatabaseConnector(String connectionUrl, String connectionUser, String connectionPassword) {
-		super(connectionUrl, connectionUser, connectionPassword);
-		m_FileReader = new FileReader();
+	private static ServerDatabaseConnector m_instance = null;
+	
+	public static ServerDatabaseConnector getInstance()
+	{
+		if(m_initialized)
+		{
+			if (m_instance == null) 
+	        { 
+				m_instance = new ServerDatabaseConnector(); 
+	        } 
+	        return m_instance; 
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public static ServerDatabaseConnector getInstance(String connectionUrl, String connectionUser, String connectionPassword)
+	{
+		init(connectionUrl, connectionUser, connectionPassword);
+        return getInstance(); 
+	}
+	
+	protected static void init(String connectionUrl, String connectionUser, String connectionPassword)
+	{
+		DatabaseConnector.init(connectionUrl,connectionUser, connectionPassword);
+	}
+	
+	private ServerDatabaseConnector() 
+	{
 	}
 	
 	public int countServers()
 	{
-		String statement = (m_FileReader.getFirstLine("sql/", "countServers.sql"));
+		String statement = (FileReader.getInstance().getFirstLine("sql/", "countServers.sql"));
 		return Math.toIntExact((Long) super.executeQuery(statement).get(0).get("count"));
 	}
 	
 	public int addServer(Server server) 
 	{
-		String statement = (m_FileReader.getFirstLine("sql/", "addServer.sql"));
+		String statement = (FileReader.getInstance().getFirstLine("sql/", "addServer.sql"));
 		statement = statement.replace("${id}",  String.valueOf(server.getId())).replace("${name}",  String.valueOf(server.getName()));
 		return super.executeUpdate(statement);
 	}
 	
-	public int removeServer(String serverName)
+	public int removeServerByName(String serverName)
 	{
-		String statement = (m_FileReader.getFirstLine("sql/", "removeServer.sql"));
+		String statement = (FileReader.getInstance().getFirstLine("sql/", "removeServerByName.sql"));
 		statement = statement.replace("${serverName}",  serverName);
 		return super.executeUpdate(statement);
 	}
 	
-	public int editServerName(String oldServerName, String newServerName) 
+	public int removeServerById(int serverId)
 	{
-		String statement = (m_FileReader.getFirstLine("sql/", "editServer.sql"));
+		String statement = (FileReader.getInstance().getFirstLine("sql/", "removeServerById.sql"));
+		statement = statement.replace("${serverId}",  String.valueOf(serverId));
+		return super.executeUpdate(statement);
+	}
+	
+	public int editServerByName(String oldServerName, String newServerName) 
+	{
+		String statement = (FileReader.getInstance().getFirstLine("sql/", "editServerByName.sql"));
 		statement = statement.replace("${oldName}",  oldServerName).replace("${newName}",  newServerName);
 		return super.executeUpdate(statement);
 	}
 	
-	public List<Server> listServers() {
-		String statement = (m_FileReader.getFirstLine("sql/", "listServers.sql"));
+	public int editServerById(int id, String newServerName) 
+	{
+		String statement = (FileReader.getInstance().getFirstLine("sql/", "editServerById.sql"));
+		statement = statement.replace("${id}", String.valueOf(id)).replace("${newName}",  newServerName);
+		return super.executeUpdate(statement);
+	}
+	
+	public List<Server> listServers() 
+	{
+		String statement = (FileReader.getInstance().getFirstLine("sql/", "listServers.sql"));
 		return mapServerResultSet(super.executeQuery(statement));
 	}
 	
 	public int getNextServerId() 
 	{
-		String statement = (m_FileReader.getFirstLine("sql/", "getNextServerId.sql"));
+		String statement = (FileReader.getInstance().getFirstLine("sql/", "getNextServerId.sql"));
 		return Math.toIntExact((Long) super.executeQuery(statement).get(0).get("nextid"));
 	}
 	

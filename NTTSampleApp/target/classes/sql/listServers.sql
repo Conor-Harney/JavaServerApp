@@ -1,1 +1,0 @@
-select * from ntt_db.SERVER

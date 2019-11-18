@@ -1,1 +1,0 @@
-delete from ntt_db.server s where s.name like "${serverName}"

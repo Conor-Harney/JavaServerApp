@@ -1,1 +1,0 @@
-select count(1) as 'count' from ntt_db.server s;

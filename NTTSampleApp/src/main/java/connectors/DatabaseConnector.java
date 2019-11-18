@@ -10,8 +10,39 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DatabaseConnector {
-	protected String m_connectionUrl, m_connectionUser, m_connectionPassword;
+import readers.XMLReader;
+
+public class DatabaseConnector 
+{
+	
+	private static DatabaseConnector m_instance = null;
+	protected static boolean m_initialized = false;
+	
+	public static DatabaseConnector getInstance()
+	{
+		if(m_initialized)
+		{
+			if (m_instance == null) 
+	        { 
+				m_instance = new DatabaseConnector(); 
+	        } 
+	        return m_instance; 
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public static DatabaseConnector getInstance(String connectionUrl, String connectionUser, String connectionPassword)
+	{
+		init(connectionUrl, connectionUser, connectionPassword);
+        return getInstance(); 
+	}
+	
+	protected static String m_connectionUrl;
+	protected static String m_connectionUser;
+	protected static String m_connectionPassword;
 	protected static String m_driver = "com.mysql.cj.jdbc.Driver";
 	
 	protected Connection openConnection()
@@ -33,17 +64,24 @@ public class DatabaseConnector {
 		return con;
 	}
 	
-	public DatabaseConnector(String connectionUrl, String connectionUser, String connectionPassword)
+	protected DatabaseConnector()
+	{
+	}
+	
+	protected static void init(String connectionUrl, String connectionUser, String connectionPassword)
 	{
 		m_connectionUrl = connectionUrl;
 		m_connectionUser = connectionUser;
 		m_connectionPassword = connectionPassword;
-		try {
+		try 
+		{
 			Class.forName(m_driver);
-		} catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) 
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		m_initialized = true;
 	}
 	
 	public boolean testConnection()
@@ -102,22 +140,26 @@ public class DatabaseConnector {
 	}
 
 
-	public String getConnectionUser() {
+	public String getConnectionUser() 
+	{
 		return m_connectionUser;
 	}
 
 
-	public void setConnectionUser(String m_connectionUser) {
+	public void setConnectionUser(String m_connectionUser) 
+	{
 		this.m_connectionUser = m_connectionUser;
 	}
 
 
-	public String getConnectionUrl() {
+	public String getConnectionUrl() 
+	{
 		return m_connectionUrl;
 	}
 
 
-	public void setConnectionUrl(String m_connectionUrl) {
+	public void setConnectionUrl(String m_connectionUrl) 
+	{
 		this.m_connectionUrl = m_connectionUrl;
 	}
 	
@@ -144,6 +186,6 @@ public class DatabaseConnector {
 			e.printStackTrace();
 		}
 		return rowList;
-		
 	}
+	
 }

@@ -27,4 +27,10 @@ public class Server
 	public void setName(String name) {
 		this.m_name = name;
 	}
+	
+	public boolean compare(Server server)
+	{
+		if(server.getId() == this.m_id && server.getName().equals(this.m_name)) return true;
+		else return false;
+	}
 }

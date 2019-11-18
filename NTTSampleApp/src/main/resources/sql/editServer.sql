@@ -1,1 +1,0 @@
-update ntt_db.server s set s.name = "${newName}" where lower(s.name) = lower("${oldName}")

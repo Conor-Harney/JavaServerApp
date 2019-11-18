@@ -1,0 +1,8 @@
+Choose from the options below by typing the command phrase:
+Help - to display this message
+Count servers - to display the current number of servers present
+Add server - to add a new server with a specified id and name 
+Generate server - to create a new server with a specified name and assign it an id
+Edit server - to change the name of a server identified by id (takes 2 additional arguments - the id and the new name)
+Delete server - to delete a server (takes one more arguments - the id of the server to delete)
+List servers - to display details of all servers servers
