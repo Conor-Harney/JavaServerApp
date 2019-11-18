@@ -1,0 +1,1 @@
+create table ntt_db.SERVER (ID int(128) NOT NULL, NAME varchar(255) NOT NULL, PRIMARY KEY (ID)) ENGINE=InnoDB;
